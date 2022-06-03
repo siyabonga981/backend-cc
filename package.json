@@ -1,0 +1,24 @@
+{
+  "name": "currency-converter-backend",
+  "version": "1.0.0",
+  "description": "Currency Conversion API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "Currency",
+    "Conversion",
+    "API"
+  ],
+  "author": "WEBGOORU PTY LTD",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "nodemailer": "^6.7.5",
+    "nodemon": "^2.0.16",
+    "request": "^2.88.2"
+  }
+}
