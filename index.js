@@ -79,9 +79,7 @@ function makeExternalRequest({
 }
 
 app.post("/sendEmail", (req, res) => {
-  if (req.body.email === null) {
-    req.body.email = "Sender does not have an email";
-  }
+  console.log(req.body);
   const output = `
       <p>${req.body.name} has sent the following message:</p>
       <h3>Message</h3>
@@ -101,8 +99,8 @@ app.post("/sendEmail", (req, res) => {
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: "siyabonga@webgooru.co.za",
-      pass: "jvPh60sb!",
+      user: "currencyratehub@webgooru.co.za",
+      pass: "jvPh60sb!!",
     },
     tls: {
       rejectUnauthorized: false,
@@ -111,8 +109,8 @@ app.post("/sendEmail", (req, res) => {
 
   let mailOptions = transporter.sendMail(
     {
-      from: '"Currency Rate Hub" <siyabonga@webgooru.co.za>', // sender address
-      to: "siyabonga@webgooru.co.za, hlongwanesiyabonga6@gmail.com", // list of receivers
+      from: `"Currency Rate Hub" <${req.body.email}>`, // sender address
+      to: "currencyratehub@webgooru.co.za", // list of receivers
       subject: `Contact Form - ${req.body.name} ✔`, // Subject line
       html: output, // html body
     },
@@ -120,7 +118,8 @@ app.post("/sendEmail", (req, res) => {
       if (!err) {
         res.send({ msg: "Email Sent Successfully!" });
       } else {
-        res.send({ err: "Error Sending Email!" });
+        console.log(err)
+        res.status(400).send({ err: "Error Sending Email!" });
       }
     }
   );
