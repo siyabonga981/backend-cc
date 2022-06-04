@@ -99,8 +99,8 @@ app.post("/sendEmail", (req, res) => {
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: "currencyratehub@webgooru.co.za",
-      pass: "jvPh60sb!!",
+      user: "siyabonga@webgooru.co.za",
+      pass: "jvPh60sb!",
     },
     tls: {
       rejectUnauthorized: false,
@@ -110,7 +110,7 @@ app.post("/sendEmail", (req, res) => {
   let mailOptions = transporter.sendMail(
     {
       from: `"Currency Rate Hub" <${req.body.email}>`, // sender address
-      to: "currencyratehub@webgooru.co.za", // list of receivers
+      to: "admin@currencyratehub.com", // list of receivers
       subject: `Contact Form - ${req.body.name} ✔`, // Subject line
       html: output, // html body
     },
