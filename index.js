@@ -12,7 +12,12 @@ app.use(express.json())
 const nodemailer = require("nodemailer");
 
 app.get("/convertCurrency", (req, res) => {
-  let conversionObj = JSON.parse(req.query.q);
+  let conversionObj = req.query;
+  if(req.query?.source !== 'app'){
+    conversionObj.firstCurrency = conversionObj.symbols.split(',')[0].toUpperCase();
+    conversionObj.secondCurrency = conversionObj.symbols.split(',')[1].toUpperCase();
+  }
+
   const symbols = `${conversionObj.firstCurrency}_${conversionObj.secondCurrency}`;
   const symbolsRev = `${conversionObj.secondCurrency}_${conversionObj.firstCurrency}`;
   let urlQuery = `convert?q=${symbols}`;
@@ -54,16 +59,14 @@ function makeExternalRequest({
 
   request(urlRateTwo, { json: true }, (err, rateTwoFromApi) => {
     if (err) {
-      console.log(err);
       return res.send(err);
     } else {
       rateTwo = rateTwoFromApi.body[symbolsRev];
       request(url, { json: true }, (err, resFromApi) => {
         if (err) {
-          console.log(err);
           res.send(err);
         } else {
-          conversionObj.date = new Date().toDateString().slice(0, 11);
+          conversionObj.date = new Date().toDateString().slice(0, 10);
           conversionObj.conversionRate = resFromApi.body[symbols];
           conversionObj.convertedAmount =
             resFromApi.body[symbols] > rateTwo
@@ -71,7 +74,12 @@ function makeExternalRequest({
               : conversionObj.amount / rateTwo;
           conversionObj.convertC1ToC2 = resFromApi.body[symbols];
           conversionObj.convertC2ToC1 = rateTwo;
+          if(!conversionObj.convertedAmount){
+            res.status(400).send("Error in conversion, check if currency codes are valid!");
+          }
+          else{
           res.send(conversionObj);
+          }
         }
       });
     }
@@ -79,7 +87,6 @@ function makeExternalRequest({
 }
 
 app.post("/sendEmail", (req, res) => {
-  console.log(req.body);
   const output = `
       <p>${req.body.name} has sent the following message:</p>
       <h3>Message</h3>
@@ -118,8 +125,7 @@ app.post("/sendEmail", (req, res) => {
       if (!err) {
         res.send({ msg: "Email Sent Successfully!" });
       } else {
-        console.log(err)
-        res.status(400).send({ err: "Error Sending Email!" });
+        res.status(400).send("Error Sending Email!");
       }
     }
   );
