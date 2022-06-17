@@ -66,7 +66,7 @@ function makeExternalRequest({
         if (err) {
           res.send(err);
         } else {
-          conversionObj.date = new Date().toDateString().slice(0, 10);
+          conversionObj.date = new Date().toDateString().slice(0, 10) + ' ' + new Date().getFullYear();
           conversionObj.conversionRate = resFromApi.body[symbols];
           conversionObj.convertedAmount =
             resFromApi.body[symbols] > rateTwo
