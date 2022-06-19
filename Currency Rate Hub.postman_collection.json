@@ -1,0 +1,74 @@
+{
+	"info": {
+		"_postman_id": "25c55e48-655a-40f6-9366-fd75688aeb3c",
+		"name": "Currency Rate Hub",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14020702"
+	},
+	"item": [
+		{
+			"name": "Convert Currency",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://currencyratehubapi.herokuapp.com/convertCurrency?symbols=INR,USD&amount=16.032835",
+					"protocol": "https",
+					"host": [
+						"currencyratehubapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"convertCurrency"
+					],
+					"query": [
+						{
+							"key": "symbols",
+							"value": "INR,USD"
+						},
+						{
+							"key": "amount",
+							"value": "16.032835"
+						}
+					]
+				},
+				"description": " Takes Two Currency Codes And An Amount To Be Converted."
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Countries",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Test\",\r\n    \"email\": \"Test\",\r\n    \"message\": \"Test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://currencyratehubapi.herokuapp.com/getCountries",
+					"protocol": "https",
+					"host": [
+						"currencyratehubapi",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"getCountries"
+					]
+				},
+				"description": "Returns Country Names, Currency Codes And Symbols For Most Countries."
+			},
+			"response": []
+		}
+	]
+}
