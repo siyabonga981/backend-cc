@@ -1,22 +1,31 @@
 const cors = require("cors");
 const express = require("express");
 const app = express();
-const PORT = "8081";
+const PORT = "5000";
 const request = require("request");
-// const apiKey = "a1aa20bfdba29afe055d";
+// const apiKey = "a1aa20bfdba29afe055d"; free
 const apiKey = "0f8b1b5277e04399a5c12aebada45a58";
 const urlFirstStr = "https://free.currconv.com/api/v7";
+const UserSchema = require("./controllers/userController");
+const PostSchema = require("./controllers/postController");
+const db = require("./db");
 app.use(cors({ origin: "*" }));
-app.listen(process.env.PORT || PORT, () => console.log(`Listening on port ${PORT}`));
-app.use(express.urlencoded({extended: true}));
-app.use(express.json())
+app.listen(process.env.PORT || PORT, () =>
+  console.log(`Listening on port ${PORT}`)
+);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 const nodemailer = require("nodemailer");
 
 app.get("/convertCurrency", (req, res) => {
   let conversionObj = req.query;
-  if(req.query?.source !== 'app'){
-    conversionObj.firstCurrency = conversionObj.symbols.split(',')[0].toUpperCase();
-    conversionObj.secondCurrency = conversionObj.symbols.split(',')[1].toUpperCase();
+  if (req.query?.source !== "app") {
+    conversionObj.firstCurrency = conversionObj.symbols
+      .split(",")[0]
+      .toUpperCase();
+    conversionObj.secondCurrency = conversionObj.symbols
+      .split(",")[1]
+      .toUpperCase();
   }
 
   const symbols = `${conversionObj.firstCurrency}_${conversionObj.secondCurrency}`;
@@ -67,7 +76,10 @@ function makeExternalRequest({
         if (err) {
           res.send(err);
         } else {
-          conversionObj.date = new Date().toDateString().slice(0, 10) + ' ' + new Date().getFullYear();
+          conversionObj.date =
+            new Date().toDateString().slice(0, 10) +
+            " " +
+            new Date().getFullYear();
           conversionObj.conversionRate = resFromApi.body[symbols];
           conversionObj.convertedAmount =
             resFromApi.body[symbols] > rateTwo
@@ -75,11 +87,12 @@ function makeExternalRequest({
               : conversionObj.amount / rateTwo;
           conversionObj.convertC1ToC2 = resFromApi.body[symbols];
           conversionObj.convertC2ToC1 = rateTwo;
-          if(!conversionObj.convertedAmount){
-            res.status(400).send("Error in conversion, check if currency codes are valid!");
-          }
-          else{
-          res.send(conversionObj);
+          if (!conversionObj.convertedAmount) {
+            res
+              .status(400)
+              .send("Error in conversion, check if currency codes are valid!");
+          } else {
+            res.send(conversionObj);
           }
         }
       });
@@ -131,3 +144,6 @@ app.post("/sendEmail", (req, res) => {
     }
   );
 });
+
+app.use("/api/users", UserSchema);
+app.use("/api/posts", PostSchema);
