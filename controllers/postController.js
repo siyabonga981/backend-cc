@@ -6,11 +6,13 @@ let mongoId = require("mongoose").Types.ObjectId;
 
 // Get posts route
 router.get("/getPosts", async (req, res) => {
-  const filter = ['SU', 'AD'].includes(req.query.id) ? {} : {username: req.params.username};
+  const filter = ["SU", "AD"].includes(req.query.id)
+    ? {}
+    : { username: req.params.username };
   PostSchema.find({ filter }, (err, posts) => {
     if (!err) {
       try {
-        res.send({msg: "Post added successfully", posts});
+        res.send({ msg: "Post added successfully", posts });
       } catch (error) {
         res.status(500).send();
       }
@@ -22,22 +24,22 @@ router.get("/getPosts", async (req, res) => {
 
 // Add post route
 router.post("/addPost", async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   let post = req.body;
-    try {
-      let newPost = new PostSchema({
-        ...post,
-      });
-      newPost.save((err, addedPost) => {
-        if (!err) {
-          res.send({ msg: "Post added successfully", addedPost });
-        } else {
-          res.status(500).send();
-        }
-      });
-    } catch (error) {
-      res.status(500).send(error);
-    }
+  try {
+    let newPost = new PostSchema({
+      ...post,
+    });
+    newPost.save((err, addedPost) => {
+      if (!err) {
+        res.send({ msg: "Post added successfully", addedPost });
+      } else {
+        res.status(500).send();
+      }
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 // Delete post route
@@ -60,7 +62,7 @@ router.delete("/deletePost/:id", (req, res) => {
 });
 
 // Edit post route
-router.put("/editPost/:id", (req, res) => {
+router.put("/updatePost/:id", (req, res) => {
   if (!mongoId.isValid(req.params.id)) {
     res.status(400).send({ msg: "Invalid Mongo ID" });
   } else {
@@ -99,4 +101,23 @@ router.get("/checkRole/:postname", async (req, res) => {
     }
   });
 });
+
+router.get("/getPostCount", async (req, res) => {
+  const filter = ["SU", "AD"].includes(req.query.id)
+    ? {}
+    : { username: req.params.username };
+  PostSchema.find({}, (err, posts) => {
+    if (!err) {
+      try {
+        res.send({count: posts.length});
+      } catch (error) {
+        res.status(500).send();
+      }
+    } else {
+      res.status(500).send();
+    }
+  });
+});
+
+
 module.exports = router;

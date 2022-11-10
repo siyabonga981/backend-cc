@@ -131,4 +131,18 @@ router.get("/checkRole/:username", async (req, res) => {
     }
   });
 });
+
+router.get("/getUserCount", async (req, res) => {
+  userSchema.find({}, (err, users) => {
+    if (!err) {
+      try {
+        res.send({count: users.length});
+      } catch (error) {
+        res.status(500).send();
+      }
+    } else {
+      res.status(500).send();
+    }
+  });
+});
 module.exports = router;
