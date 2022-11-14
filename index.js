@@ -8,6 +8,7 @@ const apiKey = "0f8b1b5277e04399a5c12aebada45a58";
 const urlFirstStr = "https://free.currconv.com/api/v7";
 const UserSchema = require("./controllers/userController");
 const PostSchema = require("./controllers/postController");
+const CommentsSchema = require("./controllers/commentsController");
 const db = require("./db");
 app.use(cors({ origin: "*" }));
 app.listen(process.env.PORT || PORT, () =>
@@ -147,3 +148,4 @@ app.post("/sendEmail", (req, res) => {
 
 app.use("/api/users", UserSchema);
 app.use("/api/posts", PostSchema);
+app.use("/api/comments", CommentsSchema);

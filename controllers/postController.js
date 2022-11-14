@@ -103,13 +103,11 @@ router.get("/checkRole/:postname", async (req, res) => {
 });
 
 router.get("/getPostCount", async (req, res) => {
-  const filter = ["SU", "AD"].includes(req.query.id)
-    ? {}
-    : { username: req.params.username };
-  PostSchema.find({}, (err, posts) => {
+  const filter = req.query;
+  PostSchema.countDocuments(filter, (err, count) => {
     if (!err) {
       try {
-        res.send({count: posts.length});
+        res.send({count});
       } catch (error) {
         res.status(500).send();
       }

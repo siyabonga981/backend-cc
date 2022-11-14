@@ -133,10 +133,11 @@ router.get("/checkRole/:username", async (req, res) => {
 });
 
 router.get("/getUserCount", async (req, res) => {
-  userSchema.find({}, (err, users) => {
+  const filter = req.query;  
+  userSchema.countDocuments(filter, (err, count) => {
     if (!err) {
       try {
-        res.send({count: users.length});
+        res.send({count});
       } catch (error) {
         res.status(500).send();
       }
